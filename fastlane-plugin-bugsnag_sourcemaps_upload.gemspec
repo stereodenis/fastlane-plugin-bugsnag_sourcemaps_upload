@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.email         = 'stereodenis@gmail.com'
 
   spec.summary       = 'Helps to upload sourcemaps to Bugsnag'
-  # spec.homepage      = "https://github.com/<GITHUB_USERNAME>/fastlane-plugin-bugsnag_sourcemaps_upload"
+  spec.homepage      = "https://github.com/stereodenis/fastlane-plugin-bugsnag_sourcemaps_upload"
   spec.license       = "MIT"
 
   spec.files         = Dir["lib/**/*"] + %w(README.md LICENSE)
