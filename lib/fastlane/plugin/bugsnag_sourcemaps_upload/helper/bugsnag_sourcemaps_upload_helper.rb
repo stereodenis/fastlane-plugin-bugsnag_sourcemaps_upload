@@ -8,14 +8,28 @@ module Fastlane
       # class methods that you define here become available in your action
       # as `Helper::BugsnagSourcemapsUploadHelper.your_method`
       #
-      def self.create_bundle(os)
+      def self.create_bundle(os, entry_file, path, bundle_path)
         UI.message("Creating React Native bundle")
-        Action.sh("react-native bundle --platform #{os} --dev false --entry-file index.js --bundle-output /tmp/#{os}.bundle --sourcemap-output /tmp/#{os}.bundle.map")
+        Action.sh("react-native bundle \
+          --platform #{os} \
+          --dev false \
+          --entry-file #{entry_file} \
+          --bundle-output #{bundle_path} \
+          --sourcemap-output #{path}")
       end
 
-      def self.upload_bundle(api_key, os)
+      def self.upload_bundle(api_key, app_version, path, bundle_path, minified_url, strip, overwrite, wildcard_prefix)
         UI.message("Uploading React Native bundle to Bugsnag")
-        Action.sh("bugsnag-sourcemaps upload --api-key #{api_key} --source-map /tmp/#{os}.bundle.map --strip-project-root --minified-file /tmp/#{os}.bundle --minified-url index.#{os}.bundle --upload-sources --overwrite")
+        Action.sh("bugsnag-sourcemaps upload \
+          --api-key #{api_key} \
+          #{app_version ? "--app-version=#{app_version} \\" : ""}
+          --source-map #{path} \
+          #{strip ? "--strip-project-root \\" : ""}
+          --minified-file #{bundle_path} \
+          --minified-url #{minified_url} \
+          --upload-sources \
+          #{overwrite ? "--overwrite \\" : ""}
+          #{wildcard_prefix ? "add-wildcard-prefix" : ""}")
       end
 
       def self.show_message
