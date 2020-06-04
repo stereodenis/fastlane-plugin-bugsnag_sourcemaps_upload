@@ -22,7 +22,6 @@ Helps to generate and upload React Native sourcemaps to Bugsnag
 # Generate and upload soucemaps
 bugsnag_sourcemaps_upload(
   api_key: 'YOUR_BUGSNAG_API_KEY',
-  os: ['ios', 'android']
 )
 
 # Uploading Hermes generated soucemaps
@@ -30,7 +29,7 @@ bugsnag_sourcemaps_upload(
   api_key: 'YOUR_BUGSNAG_API_KEY',
   app_version: '1.0.0',
   generate_sourcemaps: false,
-  os: ['android'],
+  os: 'android',
   minified_url: 'index.android.bundle',
   path: 'android/app/build/generated/sourcemaps/react/release/index.android.bundle.map',
   bundle_path: 'android/app/build/generated/assets/react/release/index.android.bundle'
