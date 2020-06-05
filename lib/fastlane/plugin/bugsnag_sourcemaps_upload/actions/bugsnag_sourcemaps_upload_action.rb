@@ -9,8 +9,8 @@ module Fastlane
         app_version = params[:app_version]
         platform = params[:platform]
         dir = params[:sourcemaps_dir]
-        name = params[:name]
-        bundle_name = params[:bundle_name]
+        sourcemap = params[:sourcemap]
+        bundle = params[:bundle]
         minified_url = params[:minified_url]
         overwrite = params[:overwrite]
         strip = params[:strip]
@@ -19,16 +19,16 @@ module Fastlane
         entry_file = params[:entry_file]
 
         path = ""
-        if name
-          path = "#{dir}/#{name}".to_s
+        if sourcemap
+          path = "#{dir}/#{sourcemap}".to_s
         else
           path = "#{dir}/#{platform}.bundle.map".to_s
         end
         bundle_path = ""
-        if bundle_name
-          path = "#{dir}/#{bundle_name}".to_s
+        if bundle
+          bundle_path = "#{dir}/#{bundle}".to_s
         else
-          path = "#{dir}/#{platform}.bundle".to_s
+          bundle_path = "#{dir}/#{platform}.bundle".to_s
         end
 
         if generate_sourcemaps
@@ -67,7 +67,10 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :app_version,
                                   env_name: "BUGSNAG_SOURCEMAPS_APP_VERSION",
                                description: "Target app version",
-                                  optional: true,
+                                  optional: false,
+                              verify_block: proc do |value|
+                                UI.user_error!("No target version given, pass using `app_version: 'version'`") unless value && !value.empty?
+                              end,
                                       type: String),
           FastlaneCore::ConfigItem.new(key: :platform,
                                   env_name: "BUGSNAG_SOURCEMAPS_PLATFORM",
@@ -81,14 +84,14 @@ module Fastlane
                                   optional: true,
                              default_value: "/tmp",
                                       type: String),
-          FastlaneCore::ConfigItem.new(key: :name,
+          FastlaneCore::ConfigItem.new(key: :sourcemap,
                                   env_name: "BUGSNAG_SOURCEMAPS_NAME",
-                               description: "Override name of(relative path to) sourcemaps, default is platform-specific",
+                               description: "Override path(relative to sourcemaps_dir) to sourcemaps, default is platform-specific",
                                   optional: true,
                                       type: String),
-          FastlaneCore::ConfigItem.new(key: :bundle_name,
+          FastlaneCore::ConfigItem.new(key: :bundle,
                                   env_name: "BUGSNAG_SOURCEMAPS_BUNDLE_NAME",
-                               description: "Override name of(relative path to) bundle to upload, default is platform-specific",
+                               description: "Override path(relative to sourcemaps_dir) bundle to upload, default is platform-specific",
                                   optional: true,
                                       type: String),
           FastlaneCore::ConfigItem.new(key: :minified_url,

@@ -22,6 +22,7 @@ Helps to generate and upload React Native sourcemaps to Bugsnag
 # Generate and upload soucemaps
 bugsnag_sourcemaps_upload(
   api_key: 'YOUR_BUGSNAG_API_KEY',
+  app_version: '1.0.0'
 )
 
 # Uploading Hermes generated soucemaps
@@ -30,10 +31,9 @@ bugsnag_sourcemaps_upload(
   app_version: '1.0.0',
   generate_sourcemaps: false,
   platform: 'android',
-  minified_url: 'index.android.bundle',
   sourcemaps_dir: 'android/app/build/generated',
-  name: 'sourcemaps/react/release/index.android.bundle.map',
-  bundle_name: 'assets/react/release/index.android.bundle'
+  sourcemap: 'sourcemaps/react/release/index.android.bundle.map',
+  bundle: 'assets/react/release/index.android.bundle'
 )
 ```
 
@@ -42,11 +42,11 @@ bugsnag_sourcemaps_upload(
 | Option | Description | Environment variable | Default value |
 | - | - | - | - |
 | api_key* | API key | BUGSNAG_API_KEY |  |
-| app_version | Target app version | BUGSNAG_SOURCEMAPS_APP_VERSION |  |
+| app_version* | Target app version | BUGSNAG_SOURCEMAPS_APP_VERSION |  |
 | platform | Target platform | BUGSNAG_SOURCEMAPS_PLATFORM | ios |
 | sourcemaps_dir | Sourcemaps directory | BUGSNAG_SOURCEMAPS_DIR | /tmp |
-| name | Override sourcemaps naming  | BUGSNAG_SOURCEMAPS_NAME | *platform*.bundle.map  |
-| bundle_name | Override minified file naming | BUGSNAG_SOURCEMAPS_BUNDLE_NAME | *platform*.bundle |
+| name | Override paht to sourcemaps(relative path to sourcemaps_dir) | BUGSNAG_SOURCEMAPS_NAME | *platform*.bundle.map  |
+| bundle | Override path to minified file(relative path to sourcemaps_dir) | BUGSNAG_SOURCEMAPS_BUNDLE_NAME | *platform*.bundle |
 | minified_url | Override minified url| BUGSNAG_SOURCEMAPS_MINIFIED_URL | index.*platform*.bundle  |
 | overwrite | Overwrite sourcemaps in Bugsnag | BUGSNAG_SOURCEMAPS_OVERWRITE | true |
 | strip | Strip root | BUGSNAG_SOURCEMAPS_STRIP_PROJECT_ROOT | true |
