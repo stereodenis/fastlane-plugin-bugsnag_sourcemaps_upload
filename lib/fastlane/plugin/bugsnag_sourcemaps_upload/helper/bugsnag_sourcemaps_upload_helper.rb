@@ -8,28 +8,37 @@ module Fastlane
       # class methods that you define here become available in your action
       # as `Helper::BugsnagSourcemapsUploadHelper.your_method`
       #
-      def self.create_bundle(os, entry_file, path, bundle_path)
+      def self.create_bundle(platform, entry_file, path, bundle_path)
         UI.message("Creating React Native bundle")
         Action.sh("react-native bundle \
-          --platform #{os} \
           --dev false \
-          --entry-file #{entry_file} \
+          --platform #{platform} \
           --bundle-output #{bundle_path} \
-          --sourcemap-output #{path}")
+          --sourcemap-output #{path} \
+          --entry-file #{entry_file}")
       end
 
-      def self.upload_bundle(api_key, app_version, path, bundle_path, minified_url, strip, overwrite, wildcard_prefix)
+      def self.upload_bundle(api_key, platform, app_version, path, bundle_path, minified_url, strip, overwrite, wildcard_prefix)
+        command = "bugsnag-sourcemaps upload --api-key #{api_key} --source-map #{path} --minified-file #{bundle_path} --upload-sources "
+        if minified_url
+          command += "--minified-url #{minified_url} "
+        else
+          command += "--minified-url index.#{platform}.bundle "
+        end
+        if app_version
+          command += "--app-version=#{app_version} "
+        end
+        if strip
+          command += "--strip-project-root "
+        end
+        if overwrite
+          command += "--overwrite "
+        end
+        if wildcard_prefix
+          command += "--add-wildcard-prefix "
+        end
         UI.message("Uploading React Native bundle to Bugsnag")
-        Action.sh("bugsnag-sourcemaps upload \
-          --api-key #{api_key} \
-          #{app_version ? "--app-version=#{app_version} \\" : ""}
-          --source-map #{path} \
-          #{strip ? "--strip-project-root \\" : ""}
-          --minified-file #{bundle_path} \
-          --minified-url #{minified_url} \
-          --upload-sources \
-          #{overwrite ? "--overwrite \\" : ""}
-          #{wildcard_prefix ? "add-wildcard-prefix" : ""}")
+        Action.sh(command.to_s)
       end
 
       def self.show_message

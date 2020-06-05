@@ -29,28 +29,32 @@ bugsnag_sourcemaps_upload(
   api_key: 'YOUR_BUGSNAG_API_KEY',
   app_version: '1.0.0',
   generate_sourcemaps: false,
-  os: 'android',
+  platform: 'android',
   minified_url: 'index.android.bundle',
-  path: 'android/app/build/generated/sourcemaps/react/release/index.android.bundle.map',
-  bundle_path: 'android/app/build/generated/assets/react/release/index.android.bundle'
+  sourcemaps_dir: 'android/app/build/generated',
+  name: 'sourcemaps/react/release/index.android.bundle.map',
+  bundle_name: 'assets/react/release/index.android.bundle'
 )
 ```
 
 ### Available options
 
-| Option              | Description | Environment variable                  | Default value       |
-| ------------------- | ----------- | ------------------------------------- | ------------------- |
-| api_key             | API key     | BUGSNAG_API_KEY                       | nil                 |
-| app_version         | app version | BUGSNAG_SOURCEMAPS_APP_VERSION        | nil                 |
-| os                  | os          | BUGSNAG_SOURCEMAPS_OS                 | ios                 |
-| path                | sourcemaps  | BUGSNAG_SOURCEMAPS_PATH               | /tmp/ios.bundle.map |
-| bundle_path         | bundle path | BUGSNAG_SOURCEMAPS_BUNDLE_PATH        | /tmp/ios.bundle     |
-| minified_url        | minified url| BUGSNAG_SOURCEMAPS_MINIFIED_URL       | index.ios.bundle    |
-| overwrite           | overwrite   | BUGSNAG_SOURCEMAPS_OVERWRITE          | true                |
-| strip               | strip root  | BUGSNAG_SOURCEMAPS_STRIP_PROJECT_ROOT | true                |
-| wildcard_prefix     | add prefix  | BUGSNAG_SOURCEMAPS_WILDCARD_PREFIX    | false               |
-| generate_sourcemaps | RN bundle   | BUGSNAG_SOURCEMAPS_GENERATE           | true                |
-| entry_file          | RN app index| BUGSNAG_SOURCEMAPS_ENTRY_FILE         | index.js            |
+| Option | Description | Environment variable | Default value |
+| - | - | - | - |
+| api_key* | API key | BUGSNAG_API_KEY |  |
+| app_version | Target app version | BUGSNAG_SOURCEMAPS_APP_VERSION |  |
+| platform | Target platform | BUGSNAG_SOURCEMAPS_PLATFORM | ios |
+| sourcemaps_dir | Sourcemaps directory | BUGSNAG_SOURCEMAPS_DIR | /tmp |
+| name | Override sourcemaps naming  | BUGSNAG_SOURCEMAPS_NAME | *platform*.bundle.map  |
+| bundle_name | Override minified file naming | BUGSNAG_SOURCEMAPS_BUNDLE_NAME | *platform*.bundle |
+| minified_url | Override minified url| BUGSNAG_SOURCEMAPS_MINIFIED_URL | index.*platform*.bundle  |
+| overwrite | Overwrite sourcemaps in Bugsnag | BUGSNAG_SOURCEMAPS_OVERWRITE | true |
+| strip | Strip root | BUGSNAG_SOURCEMAPS_STRIP_PROJECT_ROOT | true |
+| wildcard_prefix | Add wildcard prefix | BUGSNAG_SOURCEMAPS_WILDCARD_PREFIX | false |
+| generate_sourcemaps | Generate sourcemaps using react-native bundle | BUGSNAG_SOURCEMAPS_GENERATE | true |
+| entry_file | React-native app index file path | BUGSNAG_SOURCEMAPS_ENTRY_FILE | index.js |
+
+\* - required
 
 ## Run tests for this plugin
 
