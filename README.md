@@ -45,7 +45,7 @@ bugsnag_sourcemaps_upload(
 | app_version* | Target app version | BUGSNAG_SOURCEMAPS_APP_VERSION |  |
 | platform | Target platform | BUGSNAG_SOURCEMAPS_PLATFORM | ios |
 | sourcemaps_dir | Sourcemaps directory | BUGSNAG_SOURCEMAPS_DIR | /tmp |
-| name | Override paht to sourcemaps(relative path to sourcemaps_dir) | BUGSNAG_SOURCEMAPS_NAME | *platform*.bundle.map  |
+| sourcemap | Override path to sourcemaps(relative path to sourcemaps_dir) | BUGSNAG_SOURCEMAPS_NAME | *platform*.bundle.map  |
 | bundle | Override path to minified file(relative path to sourcemaps_dir) | BUGSNAG_SOURCEMAPS_BUNDLE_NAME | *platform*.bundle |
 | minified_url | Override minified url| BUGSNAG_SOURCEMAPS_MINIFIED_URL | index.*platform*.bundle  |
 | overwrite | Overwrite sourcemaps in Bugsnag | BUGSNAG_SOURCEMAPS_OVERWRITE | true |
