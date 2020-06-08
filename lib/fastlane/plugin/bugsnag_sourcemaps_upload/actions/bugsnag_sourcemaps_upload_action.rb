@@ -7,6 +7,7 @@ module Fastlane
       def self.run(params)
         api_key = params[:api_key]
         app_version = params[:app_version]
+        code_bundle_id = params[:code_bundle_id]
         platform = params[:platform]
         dir = params[:sourcemaps_dir]
         sourcemap = params[:sourcemap]
@@ -16,7 +17,10 @@ module Fastlane
         strip = params[:strip]
         wildcard_prefix = params[:wildcard_prefix]
         generate_sourcemaps = params[:generate_sourcemaps]
+        upload_sources = params[:upload_sources]
+        upload_modules = params[:upload_modules]
         entry_file = params[:entry_file]
+        endpoint = params[:endpoint]
 
         path = ""
         if sourcemap
@@ -34,7 +38,7 @@ module Fastlane
         if generate_sourcemaps
           Helper::BugsnagSourcemapsUploadHelper.create_bundle(platform, entry_file, path, bundle_path)
         end
-        Helper::BugsnagSourcemapsUploadHelper.upload_bundle(api_key, platform, app_version, path, bundle_path, minified_url, strip, overwrite, wildcard_prefix)
+        Helper::BugsnagSourcemapsUploadHelper.upload_bundle(api_key, platform, app_version, code_bundle_id, path, bundle_path, minified_url, strip, overwrite, wildcard_prefix, upload_sources, upload_modules, endpoint)
       end
 
       def self.description
@@ -67,11 +71,13 @@ module Fastlane
           FastlaneCore::ConfigItem.new(key: :app_version,
                                   env_name: "BUGSNAG_SOURCEMAPS_APP_VERSION",
                                description: "Target app version",
-                                  optional: false,
-                              verify_block: proc do |value|
-                                UI.user_error!("No target version given, pass using `app_version: 'version'`") unless value && !value.empty?
-                              end,
+                                  optional: true,
                                       type: String),
+          FastlaneCore::ConfigItem.new(key: :code_bundle_id,
+                                  env_name: "BUGSNAG_SOURCEMAPS_CODE_BUNDLE",
+                               description: "Codepush bundle ID",
+                                  optional: true,
+                                     type: String),
           FastlaneCore::ConfigItem.new(key: :platform,
                                   env_name: "BUGSNAG_SOURCEMAPS_PLATFORM",
                                description: "Platform",
@@ -123,11 +129,28 @@ module Fastlane
                                   optional: true,
                              default_value: true,
                                       type: Boolean),
+          FastlaneCore::ConfigItem.new(key: :upload_sources,
+                                  env_name: "BUGSNAG_SOURCEMAPS_UPLOAD_MODULES",
+                               description: "Upload source files referenced by the source map",
+                                  optional: true,
+                             default_value: true,
+                                      type: Boolean),
+          FastlaneCore::ConfigItem.new(key: :upload_modules,
+                                  env_name: "BUGSNAG_SOURCEMAPS_UPLOAD_MODULES",
+                               description: "Upload dependency files referenced by the source map",
+                                  optional: true,
+                             default_value: false,
+                                      type: Boolean),
           FastlaneCore::ConfigItem.new(key: :entry_file,
                                   env_name: "BUGSNAG_SOURCEMAPS_ENTRY_FILE",
                                description: "React Native index file for soucemaps generation",
                                   optional: true,
                              default_value: "index.js",
+                                      type: String),
+          FastlaneCore::ConfigItem.new(key: :endpoint,
+                                  env_name: "BUGSNAG_SOURCEMAPS_ENDPOINT",
+                               description: "Bugsnag endpoint(when using Bugsnag On-premise)",
+                                  optional: true,
                                       type: String)
         ]
       end
