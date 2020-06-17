@@ -8,14 +8,53 @@ module Fastlane
       # class methods that you define here become available in your action
       # as `Helper::BugsnagSourcemapsUploadHelper.your_method`
       #
-      def self.create_bundle(os)
+      def self.create_bundle(platform, entry_file, path, bundle_path)
         UI.message("Creating React Native bundle")
-        Action.sh("react-native bundle --platform #{os} --dev false --entry-file index.js --bundle-output /tmp/#{os}.bundle --sourcemap-output /tmp/#{os}.bundle.map")
+        Action.sh("react-native bundle \
+          --dev false \
+          --platform #{platform} \
+          --bundle-output #{bundle_path} \
+          --sourcemap-output #{path} \
+          --entry-file #{entry_file}")
       end
 
-      def self.upload_bundle(api_key, os)
+      def self.upload_bundle(api_key, platform, app_version, code_bundle_id, path, bundle_path, minified_url, strip, overwrite, wildcard_prefix, upload_sources, upload_modules, endpoint)
+        command = "bugsnag-sourcemaps upload --api-key #{api_key} --source-map #{path} --minified-file #{bundle_path} "
+        if upload_sources
+          command += "--upload-sources "
+        end
+        if upload_modules
+          command += "--upload-node-modules "
+        end
+        if minified_url
+          command += "--minified-url #{minified_url} "
+        else
+          if platform == "ios"
+            command += "--minified-url main.jsbundle "
+          else
+            command += "--minified-url index.android.bundle "
+          end
+        end
+        if app_version
+          command += "--app-version=#{app_version} "
+        end
+        if code_bundle_id
+          command += " --code-bundle-id #{code_bundle_id} "
+        end
+        if strip
+          command += "--strip-project-root "
+        end
+        if overwrite
+          command += "--overwrite "
+        end
+        if wildcard_prefix
+          command += "--add-wildcard-prefix "
+        end
+        if endpoint
+          command += "--endpoint #{endpoint} "
+        end
         UI.message("Uploading React Native bundle to Bugsnag")
-        Action.sh("bugsnag-sourcemaps upload --api-key #{api_key} --source-map /tmp/#{os}.bundle.map --strip-project-root --minified-file /tmp/#{os}.bundle --minified-url index.#{os}.bundle --upload-sources --overwrite")
+        Action.sh(command.to_s)
       end
 
       def self.show_message

@@ -13,17 +13,52 @@ fastlane add_plugin bugsnag_sourcemaps_upload
 
 ## About bugsnag_sourcemaps_upload
 
-Helps to upload sourcemaps to Bugsnag
+Helps to generate and upload React Native sourcemaps to Bugsnag
 
 
-## Example
+### Example
 
-```
+```ruby
+# Generate and upload soucemaps
 bugsnag_sourcemaps_upload(
   api_key: 'YOUR_BUGSNAG_API_KEY',
-  os: ['ios', 'android']
+  app_version: '1.0.0'
+)
+
+# Uploading Hermes generated soucemaps
+bugsnag_sourcemaps_upload(
+  api_key: 'YOUR_BUGSNAG_API_KEY',
+  app_version: '1.0.0',
+  generate_sourcemaps: false,
+  platform: 'android',
+  sourcemaps_dir: 'android/app/build/generated',
+  sourcemap: 'sourcemaps/react/release/index.android.bundle.map',
+  bundle: 'assets/react/release/index.android.bundle'
 )
 ```
+
+### Available options
+
+| Option | Description | Environment variable | Default value |
+| - | - | - | - |
+| api_key* | API key | BUGSNAG_API_KEY |  |
+| app_version | Target app version | BUGSNAG_SOURCEMAPS_APP_VERSION |  |
+| code_bundle_id | CodePush bundle ID | BUGSNAG_SOURCEMAPS_CODE_BUNDLE |  |
+| platform | Target platform | BUGSNAG_SOURCEMAPS_PLATFORM | ios |
+| sourcemaps_dir | Sourcemaps directory | BUGSNAG_SOURCEMAPS_DIR | /tmp |
+| sourcemap | Override path to sourcemaps(relative path to sourcemaps_dir) | BUGSNAG_SOURCEMAPS_NAME | *platform*.bundle.map  |
+| bundle | Override path to minified file(relative path to sourcemaps_dir) | BUGSNAG_SOURCEMAPS_BUNDLE_NAME | *platform*.bundle |
+| minified_url | Override minified url| BUGSNAG_SOURCEMAPS_MINIFIED_URL | index.android.bundle *or* main.jsbundle  |
+| overwrite | Overwrite sourcemaps in Bugsnag | BUGSNAG_SOURCEMAPS_OVERWRITE | true |
+| strip | Strip root | BUGSNAG_SOURCEMAPS_STRIP_PROJECT_ROOT | true |
+| wildcard_prefix | Add wildcard prefix | BUGSNAG_SOURCEMAPS_WILDCARD_PREFIX | false |
+| generate_sourcemaps | Generate sourcemaps using react-native bundle | BUGSNAG_SOURCEMAPS_GENERATE | true |
+| upload_sources | Upload source files referenced by the source map | BUGSNAG_SOURCEMAPS_UPLOAD_SOURCES | true |
+| upload_modules | Upload dependency files referenced by the source map | BUGSNAG_SOURCEMAPS_UPLOAD_MODULES | false
+| entry_file | React-native app index file path | BUGSNAG_SOURCEMAPS_ENTRY_FILE | index.js |
+| endpoint | Bugsnag endpoint(when using Bugsnag On-premise) | BUGSNAG_SOURCEMAPS_ENDPOINT |  |
+
+\* - required
 
 ## Run tests for this plugin
 
