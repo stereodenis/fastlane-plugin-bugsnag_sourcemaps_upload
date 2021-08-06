@@ -10,7 +10,7 @@ module Fastlane
       #
       def self.create_bundle(platform, entry_file, path, bundle_path)
         UI.message("Creating React Native bundle")
-        Action.sh("react-native bundle \
+        Action.sh("npx react-native bundle \
           --dev false \
           --platform #{platform} \
           --bundle-output #{bundle_path} \
