@@ -10,7 +10,7 @@ module Fastlane
       #
       def self.create_bundle(platform, entry_file, path, bundle_path)
         UI.message("Creating React Native bundle")
-        Action.sh("react-native bundle \
+        Action.sh("npx react-native bundle \
           --dev false \
           --platform #{platform} \
           --bundle-output #{bundle_path} \
@@ -19,7 +19,7 @@ module Fastlane
       end
 
       def self.upload_bundle(api_key, platform, app_version, code_bundle_id, path, bundle_path, minified_url, strip, overwrite, wildcard_prefix, upload_sources, upload_modules, endpoint)
-        command = "bugsnag-sourcemaps upload --api-key #{api_key} --source-map #{path} --minified-file #{bundle_path} "
+        command = "npx bugsnag-sourcemaps upload --api-key #{api_key} --source-map #{path} --minified-file #{bundle_path} "
         if upload_sources
           command += "--upload-sources "
         end
